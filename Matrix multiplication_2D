@@ -1,0 +1,34 @@
+#include <iostream>
+using namespace std;
+void main() {
+   // matrix in 2D
+   int N = 2, K = 3, M = 4;
+   float A[2][3] = { {1,2,3},{4,5,6} }, ** B, ** C;
+   B = new float* [K];
+   for (int k = 0; k < K; k++) B[k] = new float[M];
+   C = new float* [N];
+   for (int n = 0; n < N; n++) C[n] = new float[M];
+   B[0][0] = 1; B[0][1] = 0; B[0][2] = 1;  B[0][3] = 2;
+   B[1][0] = 2; B[1][1] = 1; B[1][2] = 0;  B[1][3] = 3;
+   B[2][0] = 0; B[2][1] = 1; B[2][2] = 2;  B[2][3] = 1;
+
+   // C = A * B
+   for (int n = 0; n < N; n++) {
+      for (int m = 0; m < M; m++) {
+         int _sum = 0;
+         for (int k = 0; k < K; k++) {
+            _sum += A[n][k] * B[k][m];
+         }
+         C[n][m] = _sum;
+      }
+   }
+   // show results
+   for (int n = 0; n < N; n++) {
+      for (int m = 0; m < M; m++) {
+         cout << C[n][m] << "  ";
+      }
+      cout << endl;
+   }
+   delete[] B;
+   delete[] C;
+}

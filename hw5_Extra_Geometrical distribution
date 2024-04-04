@@ -1,0 +1,47 @@
+
+
+#include <iostream>
+#include <fstream>
+#include <cmath> 
+
+using namespace std;
+
+int main() {
+    float p = 1.0 / 6.0; // 성공 확률
+    int N = 10000, count; // 실험 횟수
+    int max_k = 20; // 최대 시도 횟수
+
+    float* biex = new float[max_k + 1];
+    float* theo = new float[max_k + 1];
+
+    for (int k = 0; k <= max_k; k++) {
+        biex[k] = 0.0;
+        theo[k] = pow(1 - p, k) * p;
+    }
+
+
+
+    for (int i = 0; i < N; ++i) {
+        for (int k = 1; k <= max_k; k++) {
+            if ((rand() % 6) + 1 == 6) { // 1부터 6까지의 랜덤 값이 6이면 종료
+                biex[k - 1]++; 
+                break;
+            }
+        }
+    }
+
+ 
+    for (int k = 0; k <= max_k; k++)  biex[k] /= N;
+    
+
+    // 결과 파일에 쓰기
+    ofstream out("geometric.txt");
+    for (int k = 0; k < max_k; ++k) out << k + 1 << " " << theo[k] << " " << biex[k] << endl;
+    out.close();
+  
+
+    delete[] biex;
+    delete[] theo;
+
+    return 0;
+}

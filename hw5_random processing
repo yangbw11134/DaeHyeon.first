@@ -1,0 +1,33 @@
+
+#include<iostream>
+#include <fstream>
+#include <cmath> // for pow()
+using namespace std;
+
+float factorial(int n) { if (n == 0 || n == 1) return 1; else return n * factorial(n - 1); } // n!이 되게 하는 함수. n * (n-1) * (n-2) * ... * 2 * 1
+
+int main() {
+   float p, * biex, * bitheory;      // p : 확률, biex : 
+   int n, k, N = 100000, count;  // N number of experiment       6이 k번 나왔다.
+   n = 10;  p = 1.0 / 6.0;   // n이 20번 시행.   
+   biex = new float[n + 1];      //biex는 성공됬을떄의 시도를 넣는다. n=20일때 20번 시행중에서 몇 번 성공됬는가
+   bitheory = new float[n + 1];      // 이론 값
+
+   for (k = 0; k <= n; k++) biex[k] = 0;   // biex를 0으로 초기화?
+
+   for (int nn = 0; nn < N; nn++) {      // N번을 시행
+      count = 0;
+      for (int j = 0; j < n; j++) if ((rand() / (float)RAND_MAX) < p) count++;   // 성공할때마다 count를 증가시키고 biex 넣는다.
+      biex[count]++;
+   } // nn
+
+   for (int k = 1; k <= n; k++) biex[k] /= (float)N; // count --> probability   // biex에 저장된 count를 성공 확류로 변환
+
+   ofstream xxx("N_100000.txt");
+   for (int k = 1; k <= n; k++) {
+      bitheory[k] = factorial(n) / factorial(k) / factorial(n - k) * pow(p, k) * pow((1 - p), n - k);
+      xxx << k << " " << bitheory[k] << " " << biex[k] << endl;
+   }
+   xxx.close();
+   return 1;
+}

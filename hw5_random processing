@@ -21,7 +21,7 @@ int main() {
       biex[count]++;
    } // nn
 
-   for (int k = 1; k <= n; k++) biex[k] /= (float)N; // count --> probability   // biex에 저장된 count를 성공 확류로 변환
+   for (int k = 1; k <= n; k++) biex[k] /= (float)N; // count --> probability   // biex에 저장된 count를 성공 확률로 변환
 
    ofstream xxx("N_100000.txt");
    for (int k = 1; k <= n; k++) {

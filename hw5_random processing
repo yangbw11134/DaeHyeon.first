@@ -1,4 +1,3 @@
-
 #include<iostream>
 #include <fstream>
 #include <cmath> // for pow()
@@ -9,7 +8,7 @@ float factorial(int n) { if (n == 0 || n == 1) return 1; else return n * factori
 int main() {
    float p, * biex, * bitheory;      // p : 확률, biex : 
    int n, k, N = 100000, count;  // N number of experiment       6이 k번 나왔다.
-   n = 10;  p = 1.0 / 6.0;   // n이 20번 시행.   
+   n = 10;  p = 1.0 / 6.0;   // n이 10번 시행.
    biex = new float[n + 1];      //biex는 성공됬을떄의 시도를 넣는다. n=20일때 20번 시행중에서 몇 번 성공됬는가
    bitheory = new float[n + 1];      // 이론 값
 
@@ -21,10 +20,10 @@ int main() {
       biex[count]++;
    } // nn
 
-   for (int k = 1; k <= n; k++) biex[k] /= (float)N; // count --> probability   // biex에 저장된 count를 성공 확률로 변환
+   for (int k = 0; k <= n; k++) biex[k] /= (float)N; // count --> probability   // biex에 저장된 count를 성공 확류로 변환
 
-   ofstream xxx("N_100000.txt");
-   for (int k = 1; k <= n; k++) {
+   ofstream xxx("assignment.txt");
+   for (int k = 0; k <= n; k++) {
       bitheory[k] = factorial(n) / factorial(k) / factorial(n - k) * pow(p, k) * pow((1 - p), n - k);
       xxx << k << " " << bitheory[k] << " " << biex[k] << endl;
    }

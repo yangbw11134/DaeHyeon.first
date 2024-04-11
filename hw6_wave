@@ -31,11 +31,11 @@ int main() {
 	const float pi = 3.141592;
 
 	ofstream yy("my3.wav", ios::binary | ios::out);
-	if (!yy) return 666;  // ¸¸ÀÏ ÆÄÀÏÀÌ ¿­¸®Áö ¾ÊÀ¸¸é ÇÁ·Î±×·¥À» ³¡³½´Ù. 
-	yy.write(header, 44 * sizeof(char)); // Çì´õ¸¦ ¾´´Ù.
+	if (!yy) return 666;  // ë§Œì¼ íŒŒì¼ì´ ì—´ë¦¬ì§€ ì•Šìœ¼ë©´ í”„ë¡œê·¸ë¨ì„ ëë‚¸ë‹¤. 
+	yy.write(header, 44 * sizeof(char)); // í—¤ë”ë¥¼ ì“´ë‹¤.
 
 
-	//txt ÆÄÀÏÀ» ÀĞ°í, ±× Á¤º¸·Î wavÆÄÀÏÀ» ¸¸µç´Ù
+	//txt íŒŒì¼ì„ ì½ê³ , ê·¸ ì •ë³´ë¡œ wavíŒŒì¼ì„ ë§Œë“ ë‹¤
 	float dt = 1. / fs[0];
 	float* read_file = fRead();
 	for (int i = 0; i < read_file[0]; i++) {
@@ -47,9 +47,9 @@ int main() {
 		float t = 0.0;
 
 		for (int j = 0; j < fs[0]; j++, t += dt) {
-			data[j] = (short)(a * sin(2.0 * pi * f_1 * t) + a * sin(2.0 * pi * f_2 * t) + a * sin(2.0 * pi * f_3 * t));   // a ÁøÆø, f ÁÖÆÄ¼ö, N »ùÇÃ¼ö(1ÃÊ´Â fs[0] samples, 44100 ¶Ç´Â 8000)
+			data[j] = (short)(a * sin(2.0 * pi * f_1 * t) + a * sin(2.0 * pi * f_2 * t) + a * sin(2.0 * pi * f_3 * t));   // a ì§„í­, f ì£¼íŒŒìˆ˜, N ìƒ˜í”Œìˆ˜(1ì´ˆëŠ” fs[0] samples, 44100 ë˜ëŠ” 8000)
 		}
-		yy.write((char*)data, fs[0] * sizeof(short) * T);    // TÃÊ ºĞ·® ¾´´Ù.
+		yy.write((char*)data, fs[0] * sizeof(short) * T);    // Tì´ˆ ë¶„ëŸ‰ ì“´ë‹¤.
 	}
 	yy.close();
 	return 1;
@@ -58,14 +58,14 @@ int main() {
 float getfrequency(char hh_) {
 	float f;
 
-	if (hh_ == 67) f = 261; // C (µµ)
-	else if (hh_ == 68) f = 294; // D (·¹)
-	else if (hh_ == 69) f = 330; // E	(¹Ì)
-	else if (hh_ == 70) f = 349; // F	(ÆÄ)
-	else if (hh_ == 71) f = 392; // G	(¼Ö)
-	else if (hh_ == 72) f = 440; // A	(¶ó)
-	else if (hh_ == 73) f = 494; // B	(½Ã)
-	else  f = 0; // ¾øÀ½
+	if (hh_ == 67) f = 261; // C (ë„)
+	else if (hh_ == 68) f = 294; // D (ë ˆ)
+	else if (hh_ == 69) f = 330; // E	(ë¯¸)
+	else if (hh_ == 70) f = 349; // F	(íŒŒ)
+	else if (hh_ == 71) f = 392; // G	(ì†”)
+	else if (hh_ == 72) f = 440; // A	(ë¼)
+	else if (hh_ == 73) f = 494; // B	(ì‹œ)
+	else  f = 0; // ì—†ìŒ
 
 	return f;
 }
@@ -79,10 +79,10 @@ float getAmplitude(int ss_) {
 float getLength(int eumpyo) {
 	float T = 0.0;
 	if (eumpyo == 4) T = 1.0;
-	else if (eumpyo == 6) T = 0.75; // Á¡8ºĞÀ½Ç¥ 0.75ÃÊ
-	else if (eumpyo == 8) T = 0.5; // 8ºĞÀ½Ç¥´Â 0.5ÃÊ
-	else if (eumpyo == 16) T = 0.25; // 16ºĞÀ½Ç¥´Â 0.25ÃÊ
-	else T = 2.0; // 2ºĞÀ½Ç¥´Â 2ÃÊ
+	else if (eumpyo == 6) T = 0.75; // ì 8ë¶„ìŒí‘œ 0.75ì´ˆ
+	else if (eumpyo == 8) T = 0.5; // 8ë¶„ìŒí‘œëŠ” 0.5ì´ˆ
+	else if (eumpyo == 16) T = 0.25; // 16ë¶„ìŒí‘œëŠ” 0.25ì´ˆ
+	else T = 2.0; // 2ë¶„ìŒí‘œëŠ” 2ì´ˆ
 	return T;
 }
 
@@ -94,23 +94,23 @@ float* fRead(void) {
 	int n, eu, ss;
 	float* result;
 
-	zz >> n; // À½Ç¥°¡ ¸î °³ÀÎÁö ÀĞ±â
+	zz >> n; // ìŒí‘œê°€ ëª‡ ê°œì¸ì§€ ì½ê¸°
 
-	result = new float[n * 5 + 1]; // (4byte * n *5) + 1 ¸¸Å­ ¸Ş¸ğ¸® È®º¸
+	result = new float[n * 5 + 1]; // (4byte * n *5) + 1 ë§Œí¼ ë©”ëª¨ë¦¬ í™•ë³´
 
 	result[0] = n;
 
 	for (int i = 0; i < n; i++) {
-		zz >> eu >> hh_1 >> hh_2 >> hh_3 >> ss;  // eu ss´Â intÀÌ°í, hh´Â char
+		zz >> eu >> hh_1 >> hh_2 >> hh_3 >> ss;  // eu ssëŠ” intì´ê³ , hhëŠ” char
 		f_1 = getfrequency(hh_1);
 		f_2 = getfrequency(hh_2);
-		f_3 = getfrequency(hh_3);    // ÁÖÆÄ¼ö°¡ return µÇ´Â ÇÔ¼ö
-		a = getAmplitude(ss);    // ÁøÆøÀÌ returnµÇ´Â ÇÔ¼ö
-		T = getLength(eu);       // ½Ã°£ÀÌ returnµÇ´Â ÇÔ¼ö
+		f_3 = getfrequency(hh_3);    // ì£¼íŒŒìˆ˜ê°€ return ë˜ëŠ” í•¨ìˆ˜
+		a = getAmplitude(ss);    // ì§„í­ì´ returnë˜ëŠ” í•¨ìˆ˜
+		T = getLength(eu);       // ì‹œê°„ì´ returnë˜ëŠ” í•¨ìˆ˜
 
 		result[5 * i + 1] = T;
 		result[5 * i + 2] = f_1;
-		result[5 * i + 3] = f_2;¤·
+		result[5 * i + 3] = f_2;ã…‡
 		result[5 * i + 4] = f_3;
 		result[5 * i + 5] = a;
 
@@ -118,5 +118,5 @@ float* fRead(void) {
 
 	return result;
 }
-// ³ªÀÇ wave file ´İ±â
+// ë‚˜ì˜ wave file ë‹«ê¸°
 

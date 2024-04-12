@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 
@@ -20,14 +21,14 @@ int main() {
 	short* n;   n = (short*)(header + 22);  cout << *n << endl; // numChannels
 	int* fs;   fs = (int*)(header + 24);  cout << *fs << endl; // sampleRate
 	int* b;   b = (int*)(header + 28);  cout << *b << endl;  //  byteRate
-	*n = 1;  // mono
+	*n = 2;  // mono
 
 	// Sprint 3
 	int N = fs[0]; // number of samples for 1 second
 	short* data;
-	data = new short[N]; // allocate memory for 1 seconds mono
+	data = new short[N*2]; // allocate memory for 1 seconds mono
 	const float pi = 3.141592;
-	ofstream yy("my3.wav", ios::binary | ios::out);
+	ofstream yy("ster.wav", ios::binary | ios::out);
 	if (!yy) return 666;  // 만일 파일이 열리지 않으면 프로그램을 끝낸다. 
 	yy.write(header, 44 * sizeof(char)); // 헤더를 쓴다.
 
@@ -42,11 +43,13 @@ int main() {
 		float a = read_file[4 * i + 4];
 		float t = 0.0;
 
-		for (int j = 0; j < fs[0]; j++, t += dt) 
+		for (int j = 0; j < fs[0]; j++, t += dt)
 		{
 			f1 = (short)(a * sin(2.0 * pi * f_1 * t));
 			f2 = (short)(a * sin(2.0 * pi * f_2 * t));
-			data[j] = f1 + f2;   // a 진폭, f 주파수, N 샘플수(1초는 fs[0] samples, 44100 또는 8000)
+			
+			data[j*2] = f1;   // a 진폭, f 주파수, N 샘플수(1초는 fs[0] samples, 44100 또는 8000)
+			data[j * 2 + 1] = f2;
 		}
 		yy.write((char*)data, fs[0] * sizeof(short) * T);    // T초 분량 쓴다.
 	}
@@ -54,8 +57,11 @@ int main() {
 	return 1;
 }
 
+
+
 float getfrequency(char hh_) {
 	float f;
+
 	if (hh_ == 67) f = 261; // C (도)
 	else if (hh_ == 68) f = 294; // D (레)
 	else if (hh_ == 69) f = 330; // E	(미)
@@ -64,6 +70,7 @@ float getfrequency(char hh_) {
 	else if (hh_ == 72) f = 440; // A	(라)
 	else if (hh_ == 73) f = 494; // B	(시)
 	else  f = 0; // 없음
+
 	return f;
 }
 
@@ -83,19 +90,21 @@ float getLength(int eumpyo) {
 	return T;
 }
 
+
 float* fRead(void) {
-	ifstream zz("myWave.txt");
+	ifstream zz("Streo.txt");
 	float f_1, f_2, a, T;
 	char hh_1, hh_2;
 	int n, eu, ss;
 	float* result;
 
 	zz >> n; // 음표가 몇 개인지 읽기
+
 	result = new float[n * 4 + 1]; // (4byte * n *4) + 1 만큼 메모리 확보
 	result[0] = n;
 
 	for (int i = 0; i < n; i++) {
-		zz >> eu >> hh_1 >> hh_2  >> ss;  // eu ss는 int이고, hh는 char
+		zz >> eu >> hh_1 >> hh_2 >> ss;  // eu ss는 int이고, hh는 char
 		f_1 = getfrequency(hh_1);// 주파수가 return 되는 함수
 		f_2 = getfrequency(hh_2);
 		a = getAmplitude(ss);    // 진폭이 return되는 함수
@@ -108,3 +117,5 @@ float* fRead(void) {
 	}
 	return result;
 }
+// 나의 wave file 닫기
+

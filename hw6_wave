@@ -12,7 +12,6 @@ int main() {
 	ifstream xx("Beatles.wav", ios::binary | ios::in);
 	if (!xx) return 999;  // if the file is not found
 	char header[44];
-	
 
 	// Sprint 1
 	xx.read(header, 44);
@@ -29,25 +28,26 @@ int main() {
 	short* data;
 	data = new short[N]; // allocate memory for 1 seconds mono
 	const float pi = 3.141592;
-
 	ofstream yy("my3.wav", ios::binary | ios::out);
 	if (!yy) return 666;  // 만일 파일이 열리지 않으면 프로그램을 끝낸다. 
 	yy.write(header, 44 * sizeof(char)); // 헤더를 쓴다.
 
-
 	//txt 파일을 읽고, 그 정보로 wav파일을 만든다
 	float dt = 1. / fs[0];
+	float f1, f2;
 	float* read_file = fRead();
 	for (int i = 0; i < read_file[0]; i++) {
-		float T = read_file[5 * i + 1];
-		float f_1 = read_file[5 * i + 2];
-		float f_2 = read_file[5 * i + 3];
-		float f_3 = read_file[5 * i + 4];
-		float a = read_file[5 * i + 5];
+		float T = read_file[4 * i + 1];
+		float f_1 = read_file[4 * i + 2];
+		float f_2 = read_file[4 * i + 3];
+		float a = read_file[4 * i + 4];
 		float t = 0.0;
 
-		for (int j = 0; j < fs[0]; j++, t += dt) {
-			data[j] = (short)(a * sin(2.0 * pi * f_1 * t) + a * sin(2.0 * pi * f_2 * t) + a * sin(2.0 * pi * f_3 * t));   // a 진폭, f 주파수, N 샘플수(1초는 fs[0] samples, 44100 또는 8000)
+		for (int j = 0; j < fs[0]; j++, t += dt) 
+		{
+			f1 = (short)(a * sin(2.0 * pi * f_1 * t));
+			f2 = (short)(a * sin(2.0 * pi * f_2 * t));
+			data[j] = f1 + f2;   // a 진폭, f 주파수, N 샘플수(1초는 fs[0] samples, 44100 또는 8000)
 		}
 		yy.write((char*)data, fs[0] * sizeof(short) * T);    // T초 분량 쓴다.
 	}
@@ -89,33 +89,28 @@ float getLength(int eumpyo) {
 
 float* fRead(void) {
 	ifstream zz("myWave.txt");
-	float f_1, f_2, f_3, a, T;
+	float f_1, f_2, a, T;
 	char hh_1, hh_2, hh_3;
 	int n, eu, ss;
 	float* result;
 
 	zz >> n; // 음표가 몇 개인지 읽기
 
-	result = new float[n * 5 + 1]; // (4byte * n *5) + 1 만큼 메모리 확보
-
+	result = new float[n * 4 + 1]; // (4byte * n *4) + 1 만큼 메모리 확보
 	result[0] = n;
 
 	for (int i = 0; i < n; i++) {
 		zz >> eu >> hh_1 >> hh_2 >> hh_3 >> ss;  // eu ss는 int이고, hh는 char
-		f_1 = getfrequency(hh_1);
+		f_1 = getfrequency(hh_1);// 주파수가 return 되는 함수
 		f_2 = getfrequency(hh_2);
-		f_3 = getfrequency(hh_3);    // 주파수가 return 되는 함수
 		a = getAmplitude(ss);    // 진폭이 return되는 함수
 		T = getLength(eu);       // 시간이 return되는 함수
 
-		result[5 * i + 1] = T;
-		result[5 * i + 2] = f_1;
-		result[5 * i + 3] = f_2;ㅇ
-		result[5 * i + 4] = f_3;
-		result[5 * i + 5] = a;
-
+		result[4 * i + 1] = T;
+		result[4 * i + 2] = f_1;
+		result[4 * i + 3] = f_2;
+		result[4 * i + 4] = a;
 	}
-
 	return result;
 }
 // 나의 wave file 닫기
